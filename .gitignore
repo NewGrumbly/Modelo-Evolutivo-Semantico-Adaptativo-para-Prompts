@@ -3,3 +3,4 @@ exec/
 venv/
 corpus.csv
 filtered_corpus.csv
+test/

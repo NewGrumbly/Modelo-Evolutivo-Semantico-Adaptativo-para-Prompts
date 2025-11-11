@@ -31,8 +31,8 @@ def calculate_compression_ratio(text: str) -> float:
 
 def calculate_internal_repetition(
     text: str,
-    n_min: int = 4,
-    n_max: int = 6
+    n_min: int = 2,
+    n_max: int = 3
 ) -> float:
     """
     Measures Internal Self-Repetition, an adaptation of Self-Repetition

@@ -22,11 +22,16 @@ def _get_system_prompt() -> str:
     """
     return f"""
     You are an AI text generator. Your task is to generate a single,
-    high-quality, short output text that fulfills the instruction given in
+    high-quality, concise output (1-2 sentences maximum) that fulfills the instruction given in
     the Prompt.
 
     Your response must be strictly aligned with the Role, Topic, and
     Reference Text provided as context.
+
+    CRITICAL RULES:
+    1.  The output text MUST be text-only.
+    2.  The output text MUST be short (1-2 sentences).
+    3.  The output MUST NOT contain emojis, hashtags, URLs, or any other non-text social media artifacts.
 
     Your response MUST be a JSON object conforming to the following schema:
     {DataOutput.model_json_schema()}

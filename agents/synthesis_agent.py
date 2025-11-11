@@ -15,7 +15,7 @@ class SynthesisOutput(BaseModel):
     )
     prompt: str = Field(
         ...,
-        description="A high-quality instruction (prompt) to guide another LLM, aligned with the role, topic, and text."
+        description="A high-quality instruction (prompt) to guide another LLM, aligned with the role, topic, and reference text."
     )
 
 # --- System Prompt ---
@@ -27,9 +27,9 @@ def _get_system_prompt() -> str:
     You are an expert prompt engineer. Your task is to generate a Topic and a Prompt based on a given context.
     You must follow this internal reasoning process:
 
-    1.  **Analyze**: Read the provided Reference Text and Role to understand the situation, tone, and perspective.
-    2.  **Define Topic**: Based on your analysis, define a concise Topic that captures the core theme.
-    3.  **Construct Prompt**: Using the Topic you just defined and your analysis, construct a high-quality instruction (prompt) that guides another LLM to generate a text. This prompt must be aligned with the Role, the Topic, and the Reference Text.
+    1.  Analyze: Read the provided Reference Text and Role to understand the situation, tone, and perspective.
+    2.  Define Topic: Based on your analysis, define a concise Topic that captures the core theme.
+    3.  Construct Prompt: Using the Topic you just defined and your analysis, construct a high-quality instruction (prompt) that guides another LLM to generate a short, 1-2 sentence text. This prompt must be aligned with the Role, Topic, and Reference Text.
 
     Your response MUST be a single JSON object conforming to the following schema:
     {SynthesisOutput.model_json_schema()}
