@@ -27,6 +27,9 @@ def _get_system_prompt() -> str:
 
     The prompt must be perfectly aligned with all three inputs and
     guide another LLM to generate a short, 1-2 sentence text.
+
+    Your response MUST be a JSON object conforming to the following schema:
+    {RegeneratePromptOutput.model_json_schema()}
         """.strip()
 
 # --- User Prompt ---

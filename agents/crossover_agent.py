@@ -27,31 +27,35 @@ def _get_system_prompt() -> str:
     """
     return f"""
     You are an AI assistant specialized in genetic algorithms.
-    Your task is to perform a semantic crossover between two parent individuals.
-    You will receive the role and topic for each parent.
+    Your task is to perform a semantic crossover between two parent individuals
+    based on their relevance to a Reference Text.
 
-    Your goal is to generate a new and unique Role and Topic for a
-    child individual that logically and creatively combines the
-    characteristics of both parents.
+    You will receive the Role and Topic for each parent, and the Reference Text.
+    Your goal is to generate a new Role and Topic for a child that is 
+    highly coherent with the Reference Text.
 
     For each attribute (Role and Topic), you have two options:
-    1.  Inherit: Choose the attribute from one parent if you deem it the
-        strongest or most appropriate.
-    2.  Combine: Create a new attribute that fuses the ideas from both
-        parents (e.g., if Roles are "a healthcare worker" and "a concerned
-        citizen", a combined Role could be "a healthcare worker describing
-        their personal concerns").
+    1.  Inherit: Analyze both parent attributes and the Reference Text.
+        Choose the attribute (from Parent 1 or 2) that is semantically stronger
+        and more relevant to the Reference Text.
+    2.  Combine: If both attributes are strong and relevant, create a
+        new attribute that fuses their ideas in a way that is still
+        perfectly aligned with the Reference Text.
 
     Your response MUST be a single JSON object conforming to the following schema:
     {CrossoverOutput.model_json_schema()}
         """.strip()
 
 # --- User Prompt ---
-def _get_user_prompt(parent1: Individual, parent2: Individual) -> str:
+def _get_user_prompt(parent1: Individual, parent2: Individual, reference_text:str) -> str:
     """
-    Returns the user prompt containing the genomes of the two parents.
+    Returns the user prompt containing the genomes of the two parents
+    and Reference Text.
     """
     return f"""
+    Reference Text (Your anchor for all decisions):
+    "{reference_text}"
+
     Parent 1:
     - Role: "{parent1['role']}"
     - Topic: "{parent1['topic']}"
@@ -60,13 +64,14 @@ def _get_user_prompt(parent1: Individual, parent2: Individual) -> str:
     - Role: "{parent2['role']}"
     - Topic: "{parent2['topic']}"
 
-    Perform the semantic crossover to create the child's Role and Topic.
+    Perform the semantic crossover based on relevance to the Reference Text.
         """.strip()
 
 # --- Main Agent Function ---
 async def semantic_crossover(
     parent1: Individual,
     parent2: Individual,
+    reference_text: str,
     llm_agent: LLMAgent,
     temperature: float = 0.7
 ) -> Optional[Tuple[str, str]]:
@@ -75,7 +80,7 @@ async def semantic_crossover(
     Returns a tuple (new_role, new_topic) or None on failure.
     """
     system_prompt = _get_system_prompt()
-    user_prompt = _get_user_prompt(parent1, parent2)
+    user_prompt = _get_user_prompt(parent1, parent2, reference_text)
 
     response_obj = await llm_agent.call_llm(
         system_prompt=system_prompt,

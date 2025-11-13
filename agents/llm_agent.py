@@ -46,7 +46,7 @@ class LLMAgent:
 
         except Exception as e:
             # Generic error logging
-            print(f"❌ Error in LLMAgent.call_llm (Model: {output_model.__name__}): {e}")
-            print(f"   Input System Prompt: {system_prompt[:100]}...")
-            print(f"   Input User Prompt: {user_prompt[:100]}...")
+            # print(f"❌ Error in LLMAgent.call_llm (Model: {output_model.__name__}): {e}")
+            # print(f"   Input System Prompt: {system_prompt[:100]}...")
+            # print(f"   Input User Prompt: {user_prompt[:100]}...")
             return None

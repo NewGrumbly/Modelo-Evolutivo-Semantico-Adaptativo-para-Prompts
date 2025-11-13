@@ -15,10 +15,10 @@ STATIC_COHERENCE_PENALTY_FACTOR = 0.5
 # 2. Diversity Penalties
 # We penalize individuals with low internal diversity.
 # We set thresholds for "what is considered bad".
-COMPRESSION_THRESHOLD = 1.5 # Higher is worse (more redundant)
-REPETITION_THRESHOLD = 0.2  # Higher is worse (20% internal repetition)
+COMPRESSION_THRESHOLD = 2.0 # Higher is worse (more redundant)
+REPETITION_THRESHOLD = 0.5  # Higher is worse (20% internal repetition)
 # How strongly to penalize for low diversity
-DYNAMIC_DIVERSITY_PENALTY_FACTOR = 0.3
+DYNAMIC_DIVERSITY_PENALTY_FACTOR = 0.1
 # -------------------------------------
 
 def _apply_penalties(

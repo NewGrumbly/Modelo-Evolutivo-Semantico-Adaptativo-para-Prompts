@@ -3,6 +3,8 @@ import random
 import asyncio
 import time
 from typing import List, Optional
+from pathlib import Path
+from tqdm.asyncio import tqdm
 
 from ga.genome import Individual
 from agents.llm_agent import LLMAgent
@@ -46,7 +48,7 @@ async def _process_child_pipeline(
         # 1. Crossover or Reproduction (Copy)
         if random.random() < prob_crossover:
             # Crossover
-            result = await semantic_crossover(parent1, parent2, llm_agent)
+            result = await semantic_crossover(parent1, parent2, reference_text, llm_agent)
             if result: new_role, new_topic = result
         else:
             # Reproduction (Copy parent 1)
@@ -121,43 +123,47 @@ async def run_evolution(
         
         # 1. Check for Stagnation
         is_stuck = check_stagnation(fitness_history, STAGNATION_LIMIT)
-        if is_stuck:
-            print("   ⚠️ Stagnation detected! Enabling 'Creative Leap' mutations.")
+        '''if is_stuck:
+            print("   ⚠️ Stagnation detected! Enabling 'Creative Leap' mutations.")'''
 
         # 2. Elitism
         # The best individuals are copied directly to the next generation
         new_population = current_population[:elite_size]
-        print(f"   Elite size: {len(new_population)} individuals preserved.")
+        # print(f"   Elite size: {len(new_population)} individuals preserved.")
         
         # 3. Create Children (in parallel batches)
         children_to_create = pop_size - elite_size
         new_children: List[Individual] = []
-        
-        while len(new_children) < children_to_create:
-            n_needed = children_to_create - len(new_children)
-            batch_size = min(n_needed, CHILD_BATCH_SIZE)
-            print(f"   ... Launching child batch of {batch_size} (Target: {len(new_children)}/{children_to_create})")
 
-            tasks = []
-            for _ in range(batch_size):
-                p1 = tournament_selection(current_population, k=k_tournament)
-                p2 = tournament_selection(current_population, k=k_tournament)
-                tasks.append(
-                    _process_child_pipeline(
-                        p1, p2, reference_text, llm_agent,
-                        prob_crossover, prob_mutation, is_stuck
+        with tqdm(total=children_to_create, desc=f"Gen {g}/{generations} Children", unit="child") as pbar:
+            while len(new_children) < children_to_create:
+                n_needed = children_to_create - len(new_children)
+                batch_size = min(n_needed, CHILD_BATCH_SIZE)
+                # print(f"   ... Launching child batch of {batch_size} (Target: {len(new_children)}/{children_to_create})")
+
+                tasks = []
+                for _ in range(batch_size):
+                    p1 = tournament_selection(current_population, k=k_tournament)
+                    p2 = tournament_selection(current_population, k=k_tournament)
+                    tasks.append(
+                        _process_child_pipeline(
+                            p1, p2, reference_text, llm_agent,
+                            prob_crossover, prob_mutation, is_stuck
+                        )
                     )
-                )
-            
-            # Run tasks in parallel
-            results = await asyncio.gather(*tasks)
-            
-            successful_children = [child for child in results if child is not None]
-            new_children.extend(successful_children)
-            print(f"   ... Batch complete. {len(successful_children)} successful children.")
+                
+                # Run tasks in parallel
+                results = await asyncio.gather(*tasks)
+                
+                successful_children = [child for child in results if child is not None]
+                new_children.extend(successful_children)
+
+                # Update progress bar
+                pbar.update(len(successful_children))
+                # print(f"   ... Batch complete. {len(successful_children)} successful children.")
 
         # 4. Evaluate all new children in one batch
-        print(f"   ... Evaluating fitness for {len(new_children)} new children...")
+        # print(f"   ... Evaluating fitness for {len(new_children)} new children...")
         evaluated_children = evaluate_population_fitness(
             population=new_children,
             reference_text=reference_text,

@@ -6,8 +6,8 @@ from typing import Optional, Tuple
 from datetime import datetime
 
 # Rutas de los corpus (actualizadas)
-CORPUS_FILE = Path("../data/filtered_corpus.csv")
-EXAMPLE_CORPUS_FILE = Path("../data/example_corpus.csv")
+CORPUS_FILE = Path("data/filtered_corpus.csv")
+EXAMPLE_CORPUS_FILE = Path("data/example_corpus.csv")
 
 def load_random_reference(corpus_arg: Optional[str] = None) -> str:
     """

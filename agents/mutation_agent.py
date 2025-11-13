@@ -80,7 +80,7 @@ async def semantic_mutation(
     reference_text: str,
     llm_agent: LLMAgent,
     is_stuck: bool,
-    temperature: float = 0.8 # Slightly higher temp for creativity
+    temperature: float = 0.8
 ) -> Optional[Tuple[str, str]]:
     """
     Performs semantic mutation on an individual.

@@ -64,7 +64,7 @@ async def main():
     )
     
     # --- 4. Generate Data & Evaluate Gen 0 ---
-    print("\n--- 3/5: Generating data and evaluating Gen 0 (Robustly) ---")
+    print("\n--- 3/5: Generating data and evaluating Gen 0 ---")
     gen0_start_time = time.time()
 
     # We must ensure all N individuals have data before evaluating.
@@ -75,7 +75,7 @@ async def main():
     while individuals_to_generate:
         n_needed = len(individuals_to_generate)
         batch_size = min(n_needed, CHILD_BATCH_SIZE)
-        print(f"   ... Generating data for batch of {batch_size} (Remaining: {n_needed})")
+       # print(f"   ... Generating data for batch of {batch_size} (Remaining: {n_needed})")
 
         # Create tasks for the current batch
         tasks = [
