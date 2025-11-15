@@ -1,0 +1,8 @@
+# parameters.txt
+n                   "--n "                      c       (50, 100, 150)
+g                   "--generations "            c       (50, 100, 150)
+prob_mutation       "--prob_mutation "          c       (0.01, 0.05, 0.10)
+prob_crossover      "--prob_crossover "         c       (0.8, 0.9)
+k_perc              "--k_perc "                 c       (0.05, 0.10, 0.15)
+elit_perc           "--elit_perc "              c       (0.01, 0.02, 0.05)
+

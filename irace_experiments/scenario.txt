@@ -1,0 +1,19 @@
+# scenario.txt
+# (Main irace configuration file)
+
+# The "bridge" script irace will call
+targetRunner = "./target_runner"
+
+# Configuration files
+parameterFile = "./parameters.txt"
+trainInstancesFile = "./instances.txt"
+
+# Where irace saves its own progress (so it can be resumed)
+logFile = "./irace.Rdata"
+
+# Total budget of main.py executions
+maxExperiments = 500
+
+# Parallel processes. Start with 1.
+# You can stop irace, change this and resume.
+parallel = 1

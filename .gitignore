@@ -4,3 +4,5 @@ venv/
 corpus.csv
 filtered_corpus.csv
 test/
+filtered_corpus_2.csv
+kinda_dataset.txt
