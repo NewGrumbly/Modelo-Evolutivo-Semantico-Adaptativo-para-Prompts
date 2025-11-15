@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# target_runner
+# This script is the real targetRunner iRace will call
+# It is a simple wrapper around our Python logic script.
+
+# Absolute path to the Python executable of your venv
+PYTHON_VENV_PATH="/home/colossus/LLM/grumbly/Modelo-Evolutivo-Semantico-Adaptativo-para-Prompts/venv/bin/python"
+# ------------------------
+
+# Python logic script we want to run
+LOGIC_SCRIPT="./runner_logic.py"
+
+# iRace passes us all the arguments (config_id, instance_id, seed, instance_path, --n, --g, etc.)
+# Capture them all in a variable
+ALL_ARGS=("$@")
+
+# Execute the logic script using the Python from our venv,
+# passing it all the arguments given by irace.
+$PYTHON_VENV_PATH $LOGIC_SCRIPT "${ALL_ARGS[@]}"
