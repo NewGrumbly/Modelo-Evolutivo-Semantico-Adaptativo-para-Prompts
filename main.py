@@ -7,7 +7,9 @@ from pathlib import Path
 # Utilities
 from utils.setup import setup_experiment
 from utils.saving import save_population_to_json
-from ga.reporting import get_fitness_stats # Para el reporte de Gen 0
+from utils.saving import save_parameters_to_json
+from ga.reporting import get_fitness_stats
+
 
 # Pipeline Modules
 from agents.llm_agent import LLMAgent
@@ -46,6 +48,10 @@ async def main():
         base_dir=args.outdir_base,
         reference_text_arg=args.reference_text
     )
+
+    # Save parameters used for execution
+    save_parameters_to_json(output_dir, args)
+    
     print(f"   → Output will be saved to: {output_dir}")
     print(f"   → Reference text loaded.")
 

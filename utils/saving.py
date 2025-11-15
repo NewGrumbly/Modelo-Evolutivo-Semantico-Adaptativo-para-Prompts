@@ -42,3 +42,28 @@ def append_metrics_to_csv(
             f"{stats['min']:.6f}", f"{stats['max']:.6f}",
             f"{duration_sec:.6f}"
         ])
+
+def save_parameters_to_json(output_dir: Path, args: dict):
+    """
+    Save the execution arguments (parameters) to a JSON file
+    inside the output directory.
+    """
+    params_path = output_dir / "parameters.json"
+    
+    # Convert arguments to a simple dictionary
+    # (vars() works if args is an argparse object)
+    try:
+        params_data = vars(args).copy()
+    except TypeError:
+        # If 'args' is already a dictionary, we copy it
+        params_data = args.copy()
+
+    # Just remove the problematic key before saving.
+    if 'outdir_base' in params_data:
+        del params_data['outdir_base']
+        
+    try:
+        with open(params_path, "w", encoding="utf-8") as f:
+            json.dump(params_data, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print(f"Warning: parameters.json couldn't be saved: {e}")
