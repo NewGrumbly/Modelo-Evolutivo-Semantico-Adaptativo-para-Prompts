@@ -3,6 +3,7 @@ from typing import List
 from bert_score import score as bert_score
 from ga.genome import Individual
 from metrics.diversity import calculate_compression_ratio, calculate_internal_repetition
+import torch
 
 # --- Fitness Function Configuration ---
 
@@ -19,6 +20,8 @@ COMPRESSION_THRESHOLD = 2.0 # Higher is worse (more redundant)
 REPETITION_THRESHOLD = 0.5  # Higher is worse (20% internal repetition)
 # How strongly to penalize for low diversity
 DYNAMIC_DIVERSITY_PENALTY_FACTOR = 0.1
+
+
 # -------------------------------------
 
 def _apply_penalties(
@@ -78,6 +81,9 @@ def evaluate_population_fitness(
     # Get all candidate texts and a reference text
     candidates = [ind['generated_data'] or "" for ind in population]
     references = [reference_text] * len(population)
+
+    # Device Configuration for BERTScore
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     
     if candidates:
         # Run BERTScore once for all individuals
@@ -86,7 +92,8 @@ def evaluate_population_fitness(
             refs=references,
             model_type=bert_model,
             lang="en",
-            verbose=False
+            verbose=False,
+            device=device
         )
         f1_scores = F1.tolist()
         

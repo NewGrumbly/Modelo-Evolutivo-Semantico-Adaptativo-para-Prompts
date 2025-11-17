@@ -1,5 +1,0 @@
-# instances.txt
-# (Paths to the reference text files)
-reference_texts/text_01.txt
-reference_texts/text_02.txt
-reference_texts/text_03.txt

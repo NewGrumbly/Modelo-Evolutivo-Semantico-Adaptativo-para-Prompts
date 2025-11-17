@@ -1,6 +1,7 @@
 # agents/llm_agent.py
 import ollama
 from typing import Optional, Type
+import httpx
 from pydantic import BaseModel
 
 class LLMAgent:
@@ -8,8 +9,14 @@ class LLMAgent:
     Centralized asynchronous class to handle all interactions with the LLM model.
     """
     def __init__(self, model: str = "llama3"):
+        # Configure the LLM model to use
         self.model = model
-        self.client = ollama.AsyncClient(host='http://127.0.0.1:11434')
+
+        # Set a longer timeout for LLM calls
+        timeout = httpx.Timeout(120.0, connect=30.0)
+
+        # Initialize the Ollama async client
+        self.client = ollama.AsyncClient(host='http://127.0.0.1:11434', timeout=timeout)
     
     async def call_llm(
         self, 

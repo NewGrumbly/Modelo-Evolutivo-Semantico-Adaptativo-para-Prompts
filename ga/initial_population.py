@@ -78,7 +78,7 @@ async def create_initial_population(
             # Define next batch size
             batch_size = min(n_needed, DEFAULT_BATCH_SIZE)
 
-        # print(f"🔄 Generating batch of {batch_size} individuals... (Current: {len(population)}/{n})")
+            # print(f"🔄 Generating batch of {batch_size} individuals... (Current: {len(population)}/{n})")
 
             # Create tasks for the batch
             tasks = [

@@ -43,7 +43,7 @@ async def main():
     args = parser.parse_args()
 
     # --- 1. Setup Experiment ---
-    print("--- 1/5: Setting up experiment directory ---")
+    print("--- 1/6: Setting up experiment directory ---")
     output_dir, reference_text = setup_experiment(
         base_dir=args.outdir_base,
         reference_text_arg=args.reference_text
@@ -57,11 +57,11 @@ async def main():
 
     total_start_time = time.time()
     
-    # --- 2. Initialize LLM Agent ---
+    # Initialize LLM Agent
     llm_agent = LLMAgent(model=args.model)
 
-    # --- 3. Initial Population (Generation 0) ---
-    print(f"\n--- 2/5: Creating Initial Population (n={args.n}) ---")
+    # --- 2. Initial Population (Generation 0) ---
+    print(f"\n--- 2/6: Creating Initial Population (n={args.n}) ---")
     # This step creates N individuals, but 'generated_data' is None
     population_gen0 = await create_initial_population(
         n=args.n,
@@ -69,8 +69,8 @@ async def main():
         reference_text=reference_text
     )
     
-    # --- 4. Generate Data & Evaluate Gen 0 ---
-    print("\n--- 3/5: Generating data and evaluating Gen 0 ---")
+    # --- 3. Generate Data ---
+    print("\n--- 3/6: Generating data for Gen 0 ---")
     gen0_start_time = time.time()
 
     # We must ensure all N individuals have data before evaluating.
@@ -106,7 +106,9 @@ async def main():
             if i not in successful_indices
         ]
 
-    print("   ... All individuals for Gen 0 have generated data.")
+    print("All individuals for Gen 0 have generated data!")
+    # --- 4. Evaluate Generated Data ---
+    print("\n--- 4/6: Evaluating generated data for Gen 0 ---")
     
     # Now that all 'generated_data' fields are filled, evaluate fitness of Gen 0
     evaluated_pop_gen0 = evaluate_population_fitness(
@@ -128,7 +130,7 @@ async def main():
     print(f"   → Gen 0 evaluated. Avg Fitness: {gen0_stats['mean']:.4f}")
     
     # --- 5. Run Evolution ---
-    print(f"\n--- 4/5: Starting evolution for {args.generations} generations ---")
+    print(f"\n--- 5/6: Starting evolution for {args.generations} generations ---")
     
     final_population = await run_evolution(
         population=evaluated_pop_gen0,
@@ -144,7 +146,7 @@ async def main():
     )
     
     # --- 6. Final Consolidated Evaluation ---
-    print("\n--- 5/5: Running Final Consolidated Evaluation ---")
+    print("\n--- 6/6: Running Final Consolidated Evaluation ---")
     # Re-evaluate the entire final population using the final generation's
     # dynamic penalty, ensuring all individuals are scored by the same standard.
     final_evaluated_population = evaluate_population_fitness(

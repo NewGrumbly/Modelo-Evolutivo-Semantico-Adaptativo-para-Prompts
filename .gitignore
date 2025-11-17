@@ -6,3 +6,4 @@ filtered_corpus.csv
 test/
 filtered_corpus_2.csv
 kinda_dataset.txt
+run_experiments.log
